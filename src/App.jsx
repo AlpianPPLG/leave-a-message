@@ -4,27 +4,32 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
   const [editIndex, setEditIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddTodo = () => {
     if (!input.trim()) {
       alert("Harap isi pesan sebelum menambahkan!");
       return;
     }
-    if (editIndex === -1) {
-      // Tambah baru jika tidak dalam mode edit
-      setTodos([...todos, input]);
-    } else {
-      // Update item yang sedang diedit
-      const updatedTodos = todos.map((item, index) => {
-        if (index === editIndex) {
-          return input;
-        }
-        return item;
-      });
-      setTodos(updatedTodos);
-      setEditIndex(-1); // Keluar dari mode edit
-    }
-    setInput("");
+    setIsLoading(true);
+    setTimeout(() => {
+      if (editIndex === -1) {
+        // Tambah baru jika tidak dalam mode edit
+        setTodos([...todos, input]);
+      } else {
+        // Update item yang sedang diedit
+        const updatedTodos = todos.map((item, index) => {
+          if (index === editIndex) {
+            return input;
+          }
+          return item;
+        });
+        setTodos(updatedTodos);
+        setEditIndex(-1); // Keluar dari mode edit
+      }
+      setInput("");
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleKeyPress = (event) => {
@@ -60,32 +65,39 @@ function App() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Tambahkan pesan..."
-              className="border-2 border-gray-300 p-2 rounded mb-4"
+              className="bg-white shadow-md border-2 border-gray-300 p-2 rounded mb-4"
             />
             <button
               onClick={handleAddTodo}
               className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              disabled={isLoading}
             >
-              {editIndex === -1 ? "Tambah" : "Update"}
+              {isLoading
+                ? "Loading..."
+                : editIndex === -1
+                ? "Tambah"
+                : "Update"}
             </button>
           </div>
           <ul className="mt-4">
             {todos.map((todo, index) => (
               <li
                 key={index}
-                className="text-gray-900 flex justify-between items-center mb-4"
+                className="bg-white shadow-md border-2 border-gray-300 p-2 rounded mb-4 text-gray-900 flex justify-between items-center"
               >
                 {todo}
                 <div>
                   <button
                     onClick={() => handleEdit(index)}
                     className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+                    disabled={isLoading}
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(index)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ml-2"
+                    disabled={isLoading}
                   >
                     Hapus
                   </button>
