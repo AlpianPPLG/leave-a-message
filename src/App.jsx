@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
   const [editIndex, setEditIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const [typedText, setTypedText] = useState("");
+
+  useEffect(() => {
+    const text = "Tiinggalkan Pesan Mu!";
+    let index = 0;
+    const interval = setInterval(() => {
+      setTypedText((prevText) => prevText + text.charAt(index));
+      index++;
+      if (index === text.length) {
+        clearInterval(interval);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleAddTodo = () => {
     if (!input.trim()) {
@@ -14,10 +28,8 @@ function App() {
     setIsLoading(true);
     setTimeout(() => {
       if (editIndex === -1) {
-        // Tambah baru jika tidak dalam mode edit
         setTodos([...todos, input]);
       } else {
-        // Update item yang sedang diedit
         const updatedTodos = todos.map((item, index) => {
           if (index === editIndex) {
             return input;
@@ -25,7 +37,7 @@ function App() {
           return item;
         });
         setTodos(updatedTodos);
-        setEditIndex(-1); // Keluar dari mode edit
+        setEditIndex(-1);
       }
       setInput("");
       setIsLoading(false);
@@ -56,7 +68,7 @@ function App() {
             className="text-2xl font-bold text-gray-900 md:text-3xl mt-10"
             onClick={() => window.location.reload()}
           >
-            Tinggalkan Pesan Mu!
+            {typedText}
           </h2>
           <div className="mt-4">
             <input
