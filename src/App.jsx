@@ -47,7 +47,10 @@ function App() {
     <div className="bg-gray-60 center-text">
       <div className="p-8 md:p-10 lg:px-16 lg:py-24">
         <div className="mx-auto max-w-lg text-center">
-          <h2 className="text-2xl font-bold text-gray-900 md:text-3xl mt-10">
+          <h2
+            className="text-2xl font-bold text-gray-900 md:text-3xl mt-10"
+            onClick={() => window.location.reload()}
+          >
             Tinggalkan Pesan Mu!
           </h2>
           <div className="mt-4">
@@ -57,7 +60,7 @@ function App() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Tambahkan pesan..."
-              className="border-2 border-gray-300 p-2 rounded"
+              className="border-2 border-gray-300 p-2 rounded mb-4"
             />
             <button
               onClick={handleAddTodo}
@@ -70,7 +73,7 @@ function App() {
             {todos.map((todo, index) => (
               <li
                 key={index}
-                className="text-gray-900 flex justify-between items-center"
+                className="text-gray-900 flex justify-between items-center mb-4"
               >
                 {todo}
                 <div>
